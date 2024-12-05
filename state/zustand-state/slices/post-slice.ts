@@ -1,30 +1,34 @@
-import { StateCreator } from "zustand";
+import { create } from 'zustand';
+import { StateCreator } from 'zustand';
 
-type reactionType = {
+type ReactionType = {
   likes: number | null;
   dislikes: number | null;
 };
-export type postType = {
+
+export type PostType = {
   id: number | null;
   title: string | null;
   body: string | null;
   views: string | null;
   userId: string | null;
   tags: string[] | [];
-  reactions: reactionType[] | [];
+  reactions: ReactionType[] | [];
 };
 
-// Define the state interface that includes both the data and actions
+// Define the state interface
 interface PostState {
-  posts: postType[];
-  addPost: (post: postType) => void;
+  posts: PostType[];
+  addPost: (posts: PostType) => void;
+  deletePost: (postId: number) => void;
 }
 
-export const PostSlice: StateCreator<PostState> = (set) => ({
+// Create the PostSlice as part of Zustand store
+export const usePostStore = create<PostState>((set) => ({
   posts: [],
-  addPost: (task: postType) => {
+  addPost: (post: PostType) => {
     set((state) => ({
-      posts: [task, ...state.posts],
+      posts: [post, ...state.posts],
     }));
   },
   deletePost: (postId: number) => {
@@ -32,4 +36,4 @@ export const PostSlice: StateCreator<PostState> = (set) => ({
       posts: state.posts.filter((post) => post.id !== postId),
     }));
   },
-});
+}));

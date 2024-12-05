@@ -15,8 +15,8 @@ import Link from "next/link";
 function Navbar() {
   const navItems = [
     {
-      title: "Zustand",
-      href: "/zustand",
+      title: "React-Query",
+      href: "/react-query",
       description: "",
     },
     {
