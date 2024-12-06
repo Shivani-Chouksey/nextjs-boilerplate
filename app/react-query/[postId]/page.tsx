@@ -1,4 +1,6 @@
 "use client"
+import PostView from '@/app/product/[detail]/(components)/post-view';
+import useFetchByID from '@/hooks/crud/use-fetch-by-id';
 import React, { useEffect, useState } from 'react';
 
 const Page = ({params}:any) => {
@@ -6,21 +8,14 @@ const Page = ({params}:any) => {
     console.log("post id",params.postId);
     
 
-//   useEffect(() => {
-//     if (router.isReady) {
-//       const { postId } = router.query;
-
-//       // Ensure the postId is a string and can be converted to a number
-//       if (typeof postId === 'string' && !isNaN(Number(postId))) {
-//         setPostId(Number(postId));
-//       } else {
-//         setPostId(null); // Fallback for invalid or undefined postId
-//       }
-//     }
-//   }, [router.isReady, router.query]);
+  const { data, isLoading, error } = useFetchByID("posts", postID);
+  console.log("data in details page ",data);
+ if(isLoading) return <p>Loading.....</p>
   return (
-    <div>
-      {/* {postId ? <p>Post ID: {postId}</p> : <p>Loading...</p>} */}
+    <div className='p-4'>
+      <h1 className="text-3xl font-semibold text-center mb-6">Post Details</h1>
+
+        <PostView  postdetail={data}/>
     </div>
   );
 };
