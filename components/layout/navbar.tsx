@@ -1,6 +1,6 @@
 // components/Navbar.tsx
 import React from "react";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 // import Link from "next/link";
 import {
   DropdownMenu,
@@ -25,10 +25,25 @@ function Navbar() {
       description: "",
     },
     {
-        title: "Dynamice Routing",
-        href: "/product",
-        description: "Dynamic Routing and Hide Folder inside App Directory",
-      },
+      title: "Dynamice Routing",
+      href: "/product",
+      description: "Dynamic Routing and Hide Folder inside App Directory",
+    },
+    {
+      title: "SSG",
+      href: "/ssg",
+      // description: "Dynamic Routing and Hide Folder inside App Directory",
+    },
+    {
+      title: "SSR",
+      href: "/ssr",
+    },
+    {
+      title: "Internationalization And Localization",
+      href: "/language-convert",
+      description:
+        "Internationalization And Localization ---- Convert Language ",
+    },
   ];
 
   return (

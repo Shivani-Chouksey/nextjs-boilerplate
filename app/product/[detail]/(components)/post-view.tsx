@@ -1,16 +1,26 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-function PostView({ postdetail }: any) {
+// Define the type for postdetail
+type PostDetail = {
+  id: string;
+  title: string;
+  body: string;
+  views: number;
+  reactions?: {
+    likes: number;
+    dislikes: number;
+  };
+  tags?: string[];
+};
+
+type PostViewProps = {
+  postdetail: PostDetail;
+};
+
+function PostView({ postdetail }: PostViewProps) {
   console.log("post detail from view", postdetail);
 
   const router = useRouter();

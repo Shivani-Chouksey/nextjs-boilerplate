@@ -1,18 +1,35 @@
 "use client";
 import useFetchList from "@/hooks/crud/use-fetch-list";
-import { usePostStore } from "@/state/zustand-state/slices/post-slice";
 import React, { useEffect, useState } from "react";
 import PostView from "../product/[detail]/(components)/post-view";
 import { Button } from "@/components/ui/button";
 // import { useStore } from "zustand";
 
-function page() {
+// Define the type for PostDetail
+type PostDetail = {
+  id: string;
+  title: string;
+  body: string;
+  views: number;
+  reactions?: {
+    likes: number;
+    dislikes: number;
+  };
+  tags?: string[];
+};
+
+type FetchListResponse = {
+  posts: PostDetail[];
+};
+
+function Page() {
+  const [allPost, setAllPost] = useState<PostDetail[]>([]);
+
   // const { posts, addPost, deletePost } = usePostStore();
-  const { data, isLoading, error } = useFetchList<any>({
+  const { data, isLoading, error } = useFetchList<FetchListResponse>({
     endpoint: "/posts",
     token: "your-token",
   });
-  const [allPost, setAllPost] = useState([]);
 
   useEffect(() => {
     // Only add posts if data exists and has a posts property
@@ -41,4 +58,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

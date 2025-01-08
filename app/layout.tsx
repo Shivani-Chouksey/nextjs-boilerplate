@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import GlobalRootLayout from "@/components/layout/root-layout";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

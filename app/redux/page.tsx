@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 
-function page() {
+const Page: React.FC = () => {
   return (
-    <div className='p-4'>
+    <div className="p-4">
       Redux
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
