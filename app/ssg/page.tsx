@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
 
 type User = {
@@ -26,7 +26,7 @@ const UsersPage: React.FC<UsersPageProps> = ({ users }) => {
               key={user.id}
               className="flex items-center bg-gray-50 p-4 rounded-lg shadow-sm hover:bg-gray-100 transition"
             >
-              <Image
+              <img
                 src={user.image}
                 alt={`${user.firstName} ${user.lastName}`}
                 className="w-12 h-12 rounded-full object-cover mr-4"

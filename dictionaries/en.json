@@ -1,0 +1,52 @@
+{
+    "navigation": {
+        "home": "Home",
+        "about": "About",
+        "contact": "Contact"
+    },
+    "common": {
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "switchLanguage": "Switch language"
+    },
+    "home": {
+        "title": "Welcome",
+        "description": "Welcome to our multilingual website"
+    },
+    "about": {
+        "title": "About Us",
+        "description": "Learn more about our company"
+    },
+    "contact": {
+        "title": "Contact Us",
+        "form": {
+            "name": "Name",
+            "email": "Email",
+            "message": "Message",
+            "submit": "Send Message"
+        }
+    },
+    "services": {
+        "title": "Our Services",
+        "service1": {
+            "name": "Web Development",
+            "description": "We provide high-quality web development services."
+        },
+        "service2": {
+            "name": "Mobile App Development",
+            "description": "We build Android and iOS apps."
+        },
+        "service3": {
+            "name": "Graphic Design",
+            "description": "We create attractive graphics and logos."
+        }
+    },
+    "blog": {
+        "title": "Our Blog",
+        "latestPost": {
+            "title": "New Service Launch!",
+            "date": "January 9, 2025",
+            "excerpt": "We recently launched a new service that will make your website faster and more secure."
+        }
+    }
+}
