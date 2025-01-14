@@ -5,7 +5,7 @@ import axios, { AxiosRequestConfig } from "axios";
 export type FetchError = Error & { status?: number };
 
 // Generic type for API response
-type ApiResponse<T> = T
+type ApiResponse<T> = T;
 
 // Params for the custom hook
 type UseFetchListParams<T> = {
@@ -30,7 +30,7 @@ const useFetchList = <T>({
 
   const fetchData = async () => {
     try {
-  console.log("process.env.BASE_URL try", process.env.NEXT_PUBLIC_BASE_URL);
+      console.log("process.env.BASE_URL try", process.env.NEXT_PUBLIC_BASE_URL);
 
       const response = await axios.get<ApiResponse<T>>(
         `${process.env.NEXT_PUBLIC_BASE_URL}${endpoint}`,
@@ -43,16 +43,23 @@ const useFetchList = <T>({
           },
         }
       );
-      
+
       return response.data;
-    } catch (error: any) {
-      const fetchError: FetchError = new Error(
-        error.response?.data?.message ||
-          error.message ||
-          "An error occurred while fetching data"
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const fetchError: FetchError = new Error(
+          error.response.data?.message ||
+            error.message ||
+            "Failed to fetch data"
+        );
+        fetchError.status = error.response.status;
+        throw fetchError;
+      }
+
+      const unknownError: FetchError = new Error(
+        error instanceof Error ? error.message : "An unknown error occurred"
       );
-      fetchError.status = error.response?.status;
-      throw fetchError;
+      throw unknownError;
     }
   };
 

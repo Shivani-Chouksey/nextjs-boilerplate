@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import GlobalRootLayout from "@/components/layout/root-layout";
+import { Toaster } from "@/components/ui/toaster";
 // import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const geistSans = localFont({
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster />
         {/* <QueryClientProvider client={queryClient}> */}
         <GlobalRootLayout>{children}</GlobalRootLayout>
         {/* </QueryClientProvider> */}

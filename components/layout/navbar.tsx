@@ -40,7 +40,7 @@ function Navbar() {
     },
     {
       title: "Internationalization And Localization",
-      href: "/language-convert",
+      href: "/language-convert/en",
       description:
         "Internationalization And Localization ---- Convert Language ",
     },

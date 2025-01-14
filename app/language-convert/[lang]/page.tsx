@@ -89,7 +89,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
     console.log("Selected language:", value);
 
     // Optionally navigate or handle routing
-    router.push(`/${value}`);
+    router.push(`/language-convert/${value}`);
   };
 
   if (!dictionary) {

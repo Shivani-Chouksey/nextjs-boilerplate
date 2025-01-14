@@ -2,6 +2,9 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import useDeleteResource from "@/hooks/crud/use-delete-resource";
+import { useToast } from "@/hooks/use-toast";
+import useUpdateResource from "@/hooks/crud/use-update-resource";
 
 // Define the type for postdetail
 type PostDetail = {
@@ -22,8 +25,56 @@ type PostViewProps = {
 
 function PostView({ postdetail }: PostViewProps) {
   console.log("post detail from view", postdetail);
-
   const router = useRouter();
+  const { toast } = useToast();
+  const {
+    mutate: deleteResource,
+    isError,
+    isSuccess,
+    isPending,
+    error,
+  } = useDeleteResource();
+
+  const deleteHandler = (postId: string) => {
+    console.log("post id ", postId);
+    deleteResource({ urlEndpoint: "posts", id: postId });
+    if (isSuccess) {
+      return toast({
+        title: "Post Deleted",
+      });
+    }
+    if (isError) {
+      return toast({
+        variant: "destructive",
+        title: "Error While Deleting Post",
+        description: error.message,
+      });
+    }
+  };
+  const editableData = { title: "text" };
+  const {
+    mutate: updateReource,
+    isError: isUpdateError,
+    isPending: isUpdateLoading,
+    isSuccess: isUpdateSuccess,
+    error: updateErrorMessage,
+  } = useUpdateResource();
+  const editHandler = (postId: string | number) => {
+    updateReource({ id: postId, urlEndpoint: "posts", data: editableData });
+    if (isUpdateSuccess) {
+      return toast({
+        title: `Post Updated  ${postId} !`,
+      });
+    }
+    if (isUpdateError) {
+      return toast({
+        variant: "destructive",
+        title: "Error While Updating Post",
+        description: updateErrorMessage?.message,
+      });
+    }
+  };
+
   return (
     <>
       <Card className="  bg-gray-900 text-white rounded-lg shadow-lg ">
@@ -75,11 +126,19 @@ function PostView({ postdetail }: PostViewProps) {
         >
           View Detail
         </Button>
-        <Button variant="outline" className="m-2">
-          Edit Post
+        <Button
+          variant="outline"
+          className="m-2"
+          onClick={() => editHandler(postdetail.id)}
+        >
+          {isUpdateLoading ? "updating..." : "Edit Post"}
         </Button>
-        <Button variant="destructive" className="m-2">
-          Delete Post
+        <Button
+          variant="destructive"
+          className="m-2"
+          onClick={() => deleteHandler(`${postdetail.id}`)}
+        >
+          {isPending ? "Deleting..." : "Delete Post"}
         </Button>
       </Card>
     </>

@@ -10,7 +10,7 @@ type FetchError = {
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 // Core fetch function
-const fetchDataById = async <T = any>(
+const fetchDataById = async <T = unknown>(
   urlEndpoint: string,
   id: string | number,
   token?: string
@@ -47,7 +47,7 @@ const fetchDataById = async <T = any>(
 };
 
 // The main hook
-const useFetchByID = <T = any>(
+const useFetchByID = <T = unknown>(
   urlEndpoint: string,
   id: string | number | null,
   token?: string,
