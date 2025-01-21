@@ -1,6 +1,49 @@
 import dbConnect from "@/connection/dbconnect";
 import PostModel from "@/modal/postModal";
 
+// export async function POST(request: Request) {
+//   await dbConnect();
+//   try {
+//     const { title, description, summary, author, categories } =
+//       await request.json();
+
+//     const existingPost = await PostModel.findOne({
+//       title,
+//     });
+
+//     if (existingPost) {
+//       return Response.json(
+//         { success: false, message: "With That Title Post is already Exist" },
+//         { status: 400 }
+//       );
+//     }
+
+//     const newPost = new PostModel({
+//       title,
+//       description,
+//       summary,
+//       author,
+//       categories,
+//       isVerified: false,
+//     });
+//     await newPost.save();
+//     return Response.json(
+//       {
+//         success: true,
+//         message: "Post Created Successfully.",
+//       },
+//       { status: 201 }
+//     );
+//   } catch (error) {
+//     console.log("Error While Adding New Poat", error);
+
+//     return Response.json(
+//       { success: false, message: "Error Adding Post" },
+//       { status: 400 }
+//     );
+//   }
+// }
+
 export async function POST(request: Request) {
   await dbConnect();
   try {
@@ -12,8 +55,11 @@ export async function POST(request: Request) {
     });
 
     if (existingPost) {
-      return Response.json(
-        { success: false, message: "With That Title Post is already Exist" },
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "A post with that title already exists.",
+        }),
         { status: 400 }
       );
     }
@@ -27,19 +73,21 @@ export async function POST(request: Request) {
       isVerified: false,
     });
     await newPost.save();
-    return Response.json(
-      {
+    return new Response(
+      JSON.stringify({
         success: true,
-        message: "Post Created Successfully.",
-      },
+        message: "Post created successfully.",
+      }),
       { status: 201 }
     );
   } catch (error) {
-    console.log("Error While Adding New Poat", error);
-
-    return Response.json(
-      { success: false, message: "Error Adding Post" },
-      { status: 400 }
+    console.error("Error while adding new post:", error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        message: error instanceof Error ? error.message : "Error adding post",
+      }),
+      { status: 500 }
     );
   }
 }

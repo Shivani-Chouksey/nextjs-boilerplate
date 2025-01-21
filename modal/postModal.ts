@@ -28,7 +28,6 @@ const PostSchema: Schema<Post> = new Schema({
   },
   author: {
     type: String,
-    required: [true, "Author is required"],
     trim: true,
   },
   categories: {

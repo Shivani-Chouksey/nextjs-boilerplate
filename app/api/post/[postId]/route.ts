@@ -35,11 +35,11 @@ export async function PATCH(
   await dbConnect();
   try {
     const postId = params.postId;
-    const { isVerified } = await req.json();
+    const { isVerified, categories, description, summary } = await req.json();
 
     const updatedPostDetails = await PostModel.findByIdAndUpdate(
       { _id: postId },
-      { isVerified },
+      { isVerified, categories, description, summary },
       { new: true }
     );
     if (!updatedPostDetails) {

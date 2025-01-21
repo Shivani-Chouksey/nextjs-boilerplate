@@ -44,6 +44,10 @@ function Navbar() {
       description:
         "Internationalization And Localization ---- Convert Language ",
     },
+    {
+      title: "CURD",
+      href: "/curd-operation",
+    },
   ];
 
   return (
