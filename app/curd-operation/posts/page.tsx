@@ -46,9 +46,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Post {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   summary: string;
@@ -56,20 +57,33 @@ interface Post {
   createdAt: string;
   isVerified: boolean;
 }
-
+type ApiError = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message: string;
+};
 interface PageInfo {
   currentPage: number;
   totalPages: number;
-  totalPosts: number;
+  totalItems: number;
+  itemsPerPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
 }
 
 function Page() {
   const [postList, setPostList] = useState<Post[]>([]);
   const [pageInfo, setPageInfo] = useState<PageInfo>();
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [selectedEditablePostData, setSelectedEditablePostData] =
     useState<Post | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const formSchema = z.object({
     title: z.string().min(3, "Title must be at least 3 characters"),
@@ -96,12 +110,19 @@ function Page() {
     try {
       setIsLoading(true);
       setError(null);
-      const responseData = await axios.get("/api/post");
+      const responseData = await axios.get(
+        `/api/post?page=${page}&limit=${limit}`
+      );
       setPostList(responseData.data.data);
       setPageInfo(responseData?.data.pageInfo);
-    } catch (error) {
+    } catch (error: unknown) {
+      const err = error as ApiError;
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to load posts. Please try again later.";
+      toast({ title: errorMessage, variant: "destructive" });
       setError("Failed to load posts. Please try again later.");
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -212,9 +233,12 @@ function Page() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Blog Posts</h1>
           {pageInfo && (
             <p className="text-gray-500">
-              Showing {postList.length} of {pageInfo.totalPosts} posts
+              Showing {postList.length} of {pageInfo.totalItems} posts
             </p>
           )}
+          <Button onClick={() => router.push("/curd-operation")}>
+            Create Post
+          </Button>
         </div>
 
         {isLoading ? (
@@ -238,7 +262,7 @@ function Page() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {postList.map((post, index) => (
               <Card
-                key={post.id || index}
+                key={post._id || index}
                 className="flex flex-col hover:shadow-lg transition-shadow"
               >
                 <CardHeader>
@@ -260,7 +284,7 @@ function Page() {
                 <div className="flex px-5">
                   <Button
                     variant="destructive"
-                    onClick={() => onclickDeleteHandler(post.id)}
+                    onClick={() => onclickDeleteHandler(post._id)}
                   >
                     Delete
                   </Button>
@@ -284,15 +308,18 @@ function Page() {
                           <FormField
                             control={form.control}
                             name="title"
+                            disabled
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Post Title</FormLabel>
                                 <FormControl>
-                                  <Input {...field} />
+                                  <Input
+                                    className="border border-gray-500"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormDescription>
-                                  Write a specific and unique title that
-                                  describes your post.
+                                  You Cannot Change the Post Title
                                 </FormDescription>
                                 <FormMessage />
                               </FormItem>
@@ -331,7 +358,10 @@ function Page() {
                               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                                 <div className="space-y-0.5">
                                   <FormLabel>
-                                    Verification Status -{field.value}
+                                    Post Verification Status -
+                                    {field.value
+                                      ? "Verified ✅"
+                                      : "UnVerified ❌"}
                                   </FormLabel>
                                 </div>
                                 <FormControl>
@@ -363,7 +393,7 @@ function Page() {
                                   {field.value.map((category, index) => (
                                     <Tooltip key={index}>
                                       <TooltipTrigger asChild>
-                                        <div className="inline-flex items-center gap-1 bg-gray-300 text-black px-3 py-1 rounded-lg hover:bg-blue-200 transition-colors">
+                                        <div className="inline-flex items-center gap-1 bg-gray-300 text-black px-3 py-1 rounded-lg hover:bg-blue-200 transition-colors me-2">
                                           {category}
                                           <Button
                                             type="button"
@@ -441,6 +471,13 @@ function Page() {
           </Card>
         )}
       </div>
+      {/* <PaginationComponent
+        pageInfo={pageInfo}
+        // onPageChange={(newPage) => {
+        //   setPage(newPage);
+        //   getAllPosts(); // Fetch posts for the new page
+        // }}
+      /> */}
     </div>
   );
 }

@@ -32,6 +32,14 @@ const formSchema = z.object({
   summary: z.string().min(5, "Summary must be at least 5 characters"),
   categories: z.array(z.string()).min(1, "At least one category is required"),
 });
+type ApiError = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message: string;
+};
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -59,9 +67,12 @@ function Page() {
       } else {
         toast({ title: responseData.message, variant: "destructive" });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as ApiError;
       const errorMessage =
-        error.response?.data?.message || "An unexpected error occurred.";
+        err.response?.data?.message ||
+        err.message ||
+        "An unexpected error occurred.";
       toast({ title: errorMessage, variant: "destructive" });
     }
   };
