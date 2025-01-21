@@ -46,7 +46,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { X } from "lucide-react";
-import { Label } from "@/components/ui/label";
 
 interface Post {
   id: string;
